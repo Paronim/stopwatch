@@ -21,16 +21,20 @@
     seconds: 0,
     minutes: 0,
     hours: 0,
-    output: '00:00:00',
+    output: '0',
     interval: null
     }
   ])
 
-  const outputAdjustment = (num) => {
-    if(String(num).length === 1){
-      num = `0${num}`
+  const outputAdjustment = (sec, min, hour, index) => {
+    if(min > 0){
+      stopwatches.value[index].output = `${min}:${sec}`
+    } else if(hour > 0){
+      stopwatches.value[index].output = `${hour}:${min}:${sec}`
+    } else {
+      stopwatches.value[index].output = `${sec}`
     }
-    return num
+    
   }
 
   const start = async (index) => {
@@ -46,19 +50,21 @@
       stopwatches.value[index].minutes = 0;
       stopwatches.value[index].hours++
     }
-    stopwatches.value[index].output = `${outputAdjustment(stopwatches.value[index].hours)}:${outputAdjustment(stopwatches.value[index].minutes)}:${outputAdjustment(stopwatches.value[index].seconds)}`
+    outputAdjustment(stopwatches.value[index].seconds, stopwatches.value[index].minutes, stopwatches.value[index].hours, index)
   } , 1000)
   stopwatches.value[index].interval = startInterval
   }
 
-  const pause = (index) => {
-
+  const pause = (index) => { 
     clearInterval(stopwatches.value[index].interval);
   }
 
   const stop = (index) => {
-    stopwatches.value[index].status = false
-    stopwatches.value[index].stopwatch = '00:00:00'
+    clearInterval(stopwatches.value[index].interval);
+    stopwatches.value[index].output = '0'
+    stopwatches.value[index].seconds = 0
+    stopwatches.value[index].minutes = 0
+    stopwatches.value[index].hours = 0
   }
 
 </script>
