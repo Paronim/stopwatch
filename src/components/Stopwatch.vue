@@ -2,7 +2,7 @@
   <div class="wrapper-stopwatch">
     <div class="stopwatch-list" v-for="( stopwatch, index ) in stopwatches" :key="index">
       <div class="stopwatch-element">
-        {{ stopwatch.stopwatch }}
+        {{ stopwatch.output }}
         <div class="stopwatch-button">
           <button @click="start(index)">Старт</button>
           <button @click="pause(index)">Пауза</button>
@@ -14,41 +14,46 @@
 </template>
 
 <script setup>
-  import { computed, ref } from 'vue'
+  import { ref } from 'vue'
 
   const stopwatches = ref([
     {
-    stopwatch: '00:00:00',
-    status: null
+    seconds: 0,
+    minutes: 0,
+    hours: 0,
+    output: '00:00:00',
+    interval: null
     }
   ])
 
-
+  const outputAdjustment = (num) => {
+    if(String(num).length === 1){
+      num = `0${num}`
+    }
+    return num
+  }
 
   const start = async (index) => {
     stopwatches.value[index].status = true
 
-    let hours = 0;
-    let minutes = 0;
-    let seconds = 0;
-
   const startInterval = setInterval(() => {
-    if(seconds < 60){
-      seconds++
-    } else if(minutes < 60){
-      seconds = 0;
-      minutes++
+    if(stopwatches.value[index].seconds < 60){
+      stopwatches.value[index].seconds++
+    } else if(stopwatches.value[index].minutes < 60){
+      stopwatches.value[index].seconds = 0;
+      stopwatches.value[index].minutes++
     } else {
-      minutes = 0;
-      hours++
+      stopwatches.value[index].minutes = 0;
+      stopwatches.value[index].hours++
     }
-    stopwatches.value[index].stopwatch =  `${hours}:${minutes}:${seconds}`
+    stopwatches.value[index].output = `${outputAdjustment(stopwatches.value[index].hours)}:${outputAdjustment(stopwatches.value[index].minutes)}:${outputAdjustment(stopwatches.value[index].seconds)}`
   } , 1000)
-  stopwatches.value[index].status = startInterval
+  stopwatches.value[index].interval = startInterval
   }
 
   const pause = (index) => {
 
+    clearInterval(stopwatches.value[index].interval);
   }
 
   const stop = (index) => {
