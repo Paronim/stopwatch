@@ -1,18 +1,19 @@
 <template>
   <div class="wrapper-stopwatch">
-    <div class="stopwatch-list" v-for="( stopwatch, index ) in stopwatches" :key="index">
-      <div class="stopwatch-element">
-        {{ stopwatch.output }}
+
+      <div class="stopwatch-element" v-for="( stopwatch, index ) in stopwatches" :key="index">
+        <p class="stopwatch-content">{{ stopwatch.output }}</p>
         <div class="stopwatch-button">
-          <button v-if="stopwatch.run" @click="start(index)">Старт</button>
-          <button v-else @click="pause(index)">Пауза</button>
-          <button @click="stop(index)">Сброс</button>
+          <button class="stopwatch-button-content" v-if="stopwatch.run" @click="start(index)"><img src="../assets/triangle.png" alt="start"></button>
+          <button class="stopwatch-button-content" v-else @click="pause(index)"><img src="../assets/Pause.png" alt="pause"></button>
+          <button class="stopwatch-button-content" @click="stop(index)"><img src="../assets/square.png" alt="square"></button>
         </div>
       </div>
+
+    <div @click="addNewStopwatch()" class="stopwatch-button-add">
+    <img src="../assets/plus.png" alt="plus">
     </div>
-    <div>
-      <button @click="addNewStopwatch()"></button>
-    </div>
+
   </div>
 </template>
 
@@ -88,10 +89,57 @@
 </script>
 
 <style lang="scss">
+  .wrapper-stopwatch{
+    display: flex;
+    justify-content: start;
+    max-width: 843px;
+    flex-wrap: wrap;
+    margin: 0 auto;
+  }
   .stopwatch-element{
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 225px;
+    height: 120px;
+    background: #696969;
+    margin: 45px 28px 0 28px;
+  }
+  .stopwatch-content{
     color: #9E9E9E;
+    font-weight: 400;
+    font-size: 22px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+  }
+  .stopwatch-button{
+    border-top: 1px solid #9E9E9E;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 60px;
+  }
+  .stopwatch-button-add{
+    height: 120px;
+    background: #69696900;
+    margin: 45px 28px 0 28px;
+    display: flex;
+    justify-content: flex-start;
+  }
+  .stopwatch-button-content{
+    border: none;
+    background: #69696900;
+    margin: 0 24px 0 24px;
+  }
+  @media screen and (max-width: 800px) {
+    .wrapper-stopwatch{
+    max-width: 562px;
+  }
+  }
+  @media screen and (max-width: 425px) {
+      .wrapper-stopwatch{
+      max-width: 281px;
+    }
   }
 </style>
